@@ -1,0 +1,34 @@
+{
+  "name": "rocket-launcher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "start": "ts-node backend/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuizSim/Rocket-Laucher.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/LuizSim/Rocket-Laucher/issues"
+  },
+  "homepage": "https://github.com/LuizSim/Rocket-Laucher#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.56.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}

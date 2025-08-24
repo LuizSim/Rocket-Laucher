@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Seleção de todos os elementos do DOM
     const form = document.getElementById('form-lancamento');
     const modal = document.getElementById('modal-resultados');
     const modalAlturaMaximaEl = document.getElementById('modal-altura-maxima');
@@ -10,9 +11,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalButton = document.querySelector('.close-button');
     const modalCtx = modalCanvas.getContext('2d');
     const loadingScreen = document.getElementById('loading-screen');
+    const btnHistorico = document.getElementById('btn-historico');
+    const historicoContainer = document.getElementById('historico-container');
 
     let meuGraficoModal;
 
+    // Função assíncrona para salvar o lançamento na API
+    async function salvarLancamento(dados) {
+        try {
+            const response = await fetch('http://localhost:3000/api/launches', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dados),
+            });
+            if (!response.ok) {
+                throw new Error('Falha ao salvar os dados no servidor.');
+            }
+            console.log('Lançamento salvo com sucesso!');
+        } catch (error) {
+            console.error('Erro ao salvar:', error);
+            alert('Não foi possível salvar o lançamento. Verifique se o servidor backend está rodando.');
+        }
+    }
+
+    // Event Listener do Formulário Principal
     form.addEventListener('submit', (evento) => {
         evento.preventDefault();
 
@@ -28,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const g = 9.81;
         const anguloRad = angulo * (Math.PI / 180);
-
         const velocidadeInicial = Math.sqrt((distancia * g) / Math.sin(2 * anguloRad));
         const alturaMaxima = (Math.pow(velocidadeInicial, 2) * Math.pow(Math.sin(anguloRad), 2)) / (2 * g);
 
@@ -64,32 +87,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         borderColor: '#1a237e',
                         backgroundColor: 'rgba(26, 35, 126, 0.1)',
                         fill: true,
-                        tension: 0.4,
-                        borderWidth: 3,
+                        tension: 0.1,
+                        borderWidth: 2,
                         pointRadius: 0
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
-                    aspectRatio: 1.5,
+                    aspectRatio: 1,
                     plugins: {
                         title: { display: true, text: 'Trajetória do Foguete (Altura vs. Distância)' },
                         tooltip: { events: ['click'] }
                     },
                     scales: {
-                        x: {
-                            type: 'linear',
-                            title: { display: true, text: 'Distância (m)' },
-                            min: 0,
-                            max: Math.ceil(distancia / 10) * 10
-                        },
-                        y: {
-                            type: 'linear',
-                            title: { display: true, text: 'Altura (m)' },
-                            beginAtZero: true,
-                            max: Math.ceil(alturaMaxima / 10) * 10
-                        }
+                        x: { type: 'linear', title: { display: true, text: 'Distância (m)' }, min: 0, max: 200, ticks: { stepSize: 10 } },
+                        y: { type: 'linear', title: { display: true, text: 'Altura (m)' }, beginAtZero: true, max: 150, ticks: { stepSize: 25 } }
                     }
                 }
             });
@@ -99,9 +112,47 @@ document.addEventListener('DOMContentLoaded', () => {
             modalCanvas.style.display = 'block';
             modalBtnDownload.style.display = 'block';
 
+            const dadosParaSalvar = {
+                angle: angulo,
+                distance: distancia,
+                max_height: alturaMaxima
+            };
+            salvarLancamento(dadosParaSalvar);
+
         }, 2000);
     });
 
+    // Event Listener para o Botão de Histórico
+    btnHistorico.addEventListener('click', async () => {
+        try {
+            const response = await fetch('http://localhost:3000/api/launches');
+            if (!response.ok) {
+                throw new Error('Falha ao buscar o histórico do servidor.');
+            }
+            const historico = await response.json();
+
+            historicoContainer.innerHTML = '<h3>Histórico de Lançamentos</h3>';
+            if (historico.length === 0) {
+                historicoContainer.innerHTML += '<p>Nenhum lançamento encontrado.</p>';
+                return;
+            }
+
+            const lista = document.createElement('ul');
+            historico.forEach(lancamento => {
+                const item = document.createElement('li');
+                const dataFormatada = new Date(lancamento.created_at).toLocaleString('pt-BR');
+                item.textContent = `Data: ${dataFormatada} | Ângulo: ${lancamento.angle}° | Distância: ${lancamento.distance.toFixed(2)}m | Altura Máx.: ${lancamento.max_height.toFixed(2)}m`;
+                lista.appendChild(item);
+            });
+            historicoContainer.appendChild(lista);
+
+        } catch (error) {
+            console.error('Erro ao buscar histórico:', error);
+            alert('Não foi possível buscar o histórico. Verifique se o servidor backend está rodando.');
+        }
+    });
+
+    // Event Listeners para fechar a modal
     closeModalButton.addEventListener('click', () => {
         modal.style.display = "none";
     });
@@ -112,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Event Listener para o botão de download
     modalBtnDownload.addEventListener('click', () => {
         if (!meuGraficoModal) return;
         const canvasOriginal = meuGraficoModal.canvas;
@@ -170,19 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
         linkFake.click();
     });
 
-    CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
-        if (w < 2 * r) r = w / 2;
-        if (h < 2 * r) r = h / 2;
-        this.beginPath();
-        this.moveTo(x + r, y);
-        this.arcTo(x + w, y, x + w, y + h, r);
-        this.arcTo(x + w, y + h, x, y + h, r);
-        this.arcTo(x, y + h, x, y, r);
-        this.arcTo(x, y, x + w, y, r);
-        this.closePath();
-        return this;
-    };
-
+    // Funções Helper
     function mostrarLoading() {
         loadingScreen.style.display = 'flex';
     }
@@ -191,3 +231,17 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingScreen.style.display = 'none';
     }
 });
+
+// Adiciona a função roundRect ao protótipo do Canvas
+CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+    if (w < 2 * r) r = w / 2;
+    if (h < 2 * r) r = h / 2;
+    this.beginPath();
+    this.moveTo(x + r, y);
+    this.arcTo(x + w, y, x + w, y + h, r);
+    this.arcTo(x + w, y + h, x, y + h, r);
+    this.arcTo(x, y + h, x, y, r);
+    this.arcTo(x, y, x + w, y, r);
+    this.closePath();
+    return this;
+};
