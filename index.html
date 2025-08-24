@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocket Launcher</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="icone/iconRL.png" type="image/png">
+    <link rel="icon" type="image/svg+xml" href="icone/iconRL.png" />
+    <link rel="apple-touch-icon" href="icone/iconRL.png">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+
+    <main>
+        <h1>Rocket Launcher</h1>
+
+        <form id="form-lancamento">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="pressao">Pressão Interna (PSI)</label>
+                    <input type="number" id="pressao">
+                </div>
+                <div class="input-group">
+                    <label for="massaTotal">Massa Total (gramas)</label>
+                    <input type="number" id="massaTotal">
+                </div>
+                <div class="input-group">
+                    <label for="angulo">Ângulo de Lançamento (°)</label>
+                    <input type="number" id="angulo" required>
+                </div>
+                <div class="input-group">
+                    <label for="distancia">Distância Percorrida (m)</label>
+                    <input type="number" id="distancia" required>
+                </div>
+            </div>
+            <button type="submit">Calcular Trajetória</button>
+        </form>
+
+        <div id="modal-resultados" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Resultados do Lançamento</h2>
+                <div class="info-resultados">
+                    <p>Altura Máxima: <strong><span id="modal-altura-maxima">--</span> m</strong></p>
+                    <p>Angulação: <strong><span id="modal-angulo">--</span>°</strong></p>
+                    <p>Distância Percorrida: <strong><span id="modal-distancia">--</span> m</strong></p>
+                </div>
+                <div class="grafico-container">
+                    <canvas id="modal-graficoFoguete"></canvas>
+                </div>
+                <button id="modal-btnDownload" style="display: none;">Baixar Gráfico</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="loading-screen" class="loading" style="display: none;">
+        <div class="loading-icon">🚀</div>
+        <p>Calculando trajetória...</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
