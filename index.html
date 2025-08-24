@@ -40,7 +40,15 @@
         </form>
 
         <button type="button" id="btn-historico">Ver Histórico de Lançamentos</button>
-        <div id="historico-container"></div>
+        <div id="modal-historico" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Histórico de Lançamentos</h2>
+                <div id="db-status-container"></div>
+                <div id="lista-historico-container">
+                </div>
+            </div>
+        </div>
 
         <div id="modal-resultados" class="modal">
             <div class="modal-content">
@@ -64,9 +72,22 @@
         <p>Calculando trajetória...</p>
     </div>
 
+    <div id="custom-popup" class="modal">
+        <div class="popup-content">
+            <h2 id="popup-title"></h2>
+            <p id="popup-message"></p>
+            <div id="popup-buttons" class="popup-buttons">
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
     <script src="src/server.ts"></script>
+
+    <footer>
+        <p>Feito Por L.S</p>
+    </footer>
 </body>
 
 </html>

@@ -1,6 +1,18 @@
+/* Animação para elementos aparecerem de baixo para cima */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f0f2f5;
+    background-color: #dadada;
     color: #333;
     display: flex;
     justify-content: center;
@@ -10,6 +22,7 @@ body {
     padding: 20px;
     box-sizing: border-box;
 }
+
 main {
     padding: 30px;
     border-radius: 8px;
@@ -17,26 +30,38 @@ main {
     max-width: 600px;
     text-align: center;
 }
+
+/* Animação de entrada para o título e formulário */
 h1 {
-    color: #1a237e;
+    color: #3f3f3f;
     margin-bottom: 25px;
+    animation: fadeInUp 0.5s ease-out forwards;
 }
+
+form {
+    opacity: 0; /* Começa invisível para animar */
+    animation: fadeInUp 0.5s ease-out 0.2s forwards;
+}
+
 h2 {
-    color: #3949ab;
+    color: #3f3f3f;
     border-bottom: 2px solid #e0e0e0;
     padding-bottom: 10px;
     margin-top: 40px;
 }
+
 .input-group {
     margin-bottom: 20px;
     text-align: left;
 }
+
 .input-group label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
     color: #555;
 }
+
 .input-group input {
     width: 100%;
     padding: 12px;
@@ -44,64 +69,106 @@ h2 {
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
+
+/* Efeito de foco para os inputs */
+.input-group input:focus {
+    outline: none;
+    border-color: #333;
+    box-shadow: 0 0 0 3px rgba(51, 51, 51, 0.1);
+}
+
 button {
-    background-color: #1a237e;
-    color: white;
+    background-color: #333333;
+    color: #d1d0d0;
     padding: 12px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 1rem;
     font-weight: bold;
     width: 100%;
     margin-top: 10px;
-    transition: background-color 0.3s ease;
+    transition: all 0.2s ease;
 }
+
+/* Transições aprimoradas para botões */
 button:hover {
-    background-color: #3949ab;
+    background-color: #252525;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
+
+button:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Animação para a aparição suave da modal */
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 10;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
 }
+
+.modal.active {
+    opacity: 1;
+}
+
 .modal-content {
-    background-color: #fefefe;
+    background-color: rgba(224, 224, 224, 0.3);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: #25252571 0px 4px 8px 0px, #2525254d 0px 6px 20px 0px;
     margin: 5% auto;
     padding: 25px;
-    border: 1px solid #888;
     width: 75%;
     max-width: 1000px;
-    border-radius: 8px;
+    border-radius: 12px;
     position: relative;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
+
+.modal.active .modal-content {
+    opacity: 1;
+    transform: scale(1);
+}
+
 .close-button {
-    color: #aaa;
+    color: #3b3b3b;
     float: right;
     font-size: 28px;
     font-weight: bold;
+    transition: transform 0.2s;
 }
+
 .close-button:hover,
 .close-button:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
+    transform: scale(1.1);
 }
+
+/* Estilos de Loading, Histórico, Popups, etc. */
 .loading {
     position: fixed;
-    z-index: 2;
+    z-index: 20;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
     background-color: rgba(0,0,0,0.7);
     display: flex;
     flex-direction: column;
@@ -110,12 +177,129 @@ button:hover {
     color: white;
     font-size: 1.2rem;
 }
+
 .loading-icon {
     font-size: 3rem;
     margin-bottom: 15px;
     animation: rocket-fly 1s infinite alternate;
 }
+
 @keyframes rocket-fly {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-10px); }
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+}
+
+#lista-historico-container ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+#lista-historico-container li {
+    background-color: #333;
+    color: #dbe1f9;
+    border: 1px solid #333;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-weight: 600;
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#lista-historico-container li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    background-color: #252525;
+    color: #ffffff;
+    border-color: #252525;
+}
+
+.historico-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-apagar {
+    background-color: #242424;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 30px;
+    height: 40px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 30px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.btn-apagar:hover {
+    background-color: #292929;
+    transform: scale(1.05);
+}
+
+.db-status-warning {
+    background-color: #d6d6d6;
+    border: 1px solid #727272;
+    color: #707070;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.popup-content {
+    background-color: #e7e7e7;
+    margin: 20% auto;
+    padding: 25px 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.popup-buttons button {
+    width: auto;
+    min-width: 100px;
+    font-weight: bold;
+}
+
+.popup-btn-confirm {
+    background-color: #333;
+}
+
+.popup-btn-confirm:hover {
+    background-color: #505050;
+}
+
+.popup-btn-cancel {
+    background-color: #6c757d;
+}
+
+.popup-btn-cancel:hover {
+    background-color: #5a6268;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0;
+    color: #333333;
+    text-align: center;
+    font-size: 0.9rem;
+    z-index: 5;
 }
