@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function salvarLancamento(dados) {
         try {
-            const response = await fetch('http://localhost:3000/api/launches', {
+            const response = await fetch('https://rocket-laucher-backend.onrender.com/api/launches', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dados),
@@ -227,13 +227,13 @@ document.addEventListener('DOMContentLoaded', () => {
     btnHistorico.addEventListener('click', async () => {
         try {
             mostrarLoading();
-            const statusResponse = await fetch('http://localhost:3000/api/database/status');
+            const statusResponse = await fetch('https://rocket-laucher-backend.onrender.com/api/database/status');
             const statusData = await statusResponse.json();
             dbStatusContainer.innerHTML = '';
             if (statusData.status === 'quase cheio') {
                 dbStatusContainer.innerHTML = `<div class="db-status-warning">Atenção: O armazenamento de dados está quase cheio (${statusData.usage_percentage}% utilizado).</div>`;
             }
-            const response = await fetch('http://localhost:3000/api/launches');
+            const response = await fetch('https://rocket-laucher-backend.onrender.com/api/launches');
             if (!response.ok) throw new Error('Falha ao buscar o histórico.');
             const historico = await response.json();
 
@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (confirmado) {
                             const id = e.target.dataset.id;
                             try {
-                                const deleteResponse = await fetch(`http://localhost:3000/api/launches/${id}`, {
+                                const deleteResponse = await fetch(`https://rocket-laucher-backend.onrender.com/api/launches/${id}`, {
                                     method: 'DELETE',
                                 });
                                 if (!deleteResponse.ok) throw new Error('Falha ao apagar.');
