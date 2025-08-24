@@ -40,15 +40,6 @@
         </form>
 
         <button type="button" id="btn-historico">Ver Histórico de Lançamentos</button>
-        <div id="modal-historico" class="modal">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <h2>Histórico de Lançamentos</h2>
-                <div id="db-status-container"></div>
-                <div id="lista-historico-container">
-                </div>
-            </div>
-        </div>
 
         <div id="modal-resultados" class="modal">
             <div class="modal-content">
@@ -58,11 +49,24 @@
                     <p>Altura Máxima: <strong><span id="modal-altura-maxima">--</span> m</strong></p>
                     <p>Angulação: <strong><span id="modal-angulo">--</span>°</strong></p>
                     <p>Distância Percorrida: <strong><span id="modal-distancia">--</span> m</strong></p>
+
+                    <p>Velocidade de Saída: <strong><span id="modal-velocidade">--</span> m/s</strong></p>
+                    <p>Força Teórica: <strong><span id="modal-forca">--</span> N</strong></p>
+                    <p>Aceleração Teórica: <strong><span id="modal-aceleracao">--</span> m/s²</strong></p>
                 </div>
                 <div class="grafico-container">
                     <canvas id="modal-graficoFoguete"></canvas>
                 </div>
                 <button id="modal-btnDownload" style="display: none;">Baixar Gráfico</button>
+            </div>
+        </div>
+
+        <div id="modal-historico" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Histórico de Lançamentos</h2>
+                <div id="db-status-container"></div>
+                <div id="lista-historico-container"></div>
             </div>
         </div>
     </main>
@@ -76,18 +80,16 @@
         <div class="popup-content">
             <h2 id="popup-title"></h2>
             <p id="popup-message"></p>
-            <div id="popup-buttons" class="popup-buttons">
-            </div>
+            <div id="popup-buttons"></div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
-    <script src="src/server.ts"></script>
 
     <footer>
         <p>Feito Por L.S</p>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
