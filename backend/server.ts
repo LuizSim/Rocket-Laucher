@@ -100,6 +100,10 @@ app.get('/api/database/status', async (req, res) => {
     });
 });
 
+app.get('/api/health', (req, res) => {
+    res.status(200).json({ status: 'ok', message: 'Servidor está ativo.' });
+});
+
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
 });
