@@ -1,1 +1,10 @@
+# Dependências
+node_modules/
+
+# Build
+dist/
+build/
+
+# Config
 .env
+.env.local
